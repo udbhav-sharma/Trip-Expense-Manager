@@ -7,5 +7,6 @@
  */
 
 $config['tables']['trips']  = 'trips';
-
+$config['tables']['members'] = 'members';
+$config['tables']['expenses'] = 'expenses';
 ?>

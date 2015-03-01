@@ -1,26 +1,27 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
  * Created by PhpStorm.
  * User: UDBHAV
  * Date: 3/1/2015
- * Time: 5:53 PM
+ * Time: 11:24 PM
  */
 
-class Trips_model extends CI_Model{
+class Members_model extends CI_Model{
     public function __construct(){
         parent::__construct();
-        $this->db_trips = $this->load->database('tep',TRUE);
+        $this->db_trips = $this->load->database('tep', TRUE);
         $this->load->config('database_tables', TRUE);
         $this->tables = $this->config->item('tables', 'database_tables');
     }
 
-    public function getTrips( $isJson=false, $isObject = false ){
+    public function getTripMembers( $tripId, $isJson=false, $isObject = false ){
         $query = $this->db_trips->select('
-                                            id as tripId,
-                                            DATE(date) as date,
-                                            name as tripName
+                                            id as memberId,
+                                            tripId,
+                                            name as memberName
                                         ')
-                                ->get($this->tables['trips']);
+                                ->where(array( 'tripId' => $tripId ))
+                                ->get($this->tables['members']);
         if($isObject)
             return $query->result();
         elseif($isJson)
@@ -28,5 +29,4 @@ class Trips_model extends CI_Model{
         return $query->result('array');
     }
 }
-
 ?>

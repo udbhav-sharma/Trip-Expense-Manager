@@ -39,9 +39,6 @@
                         $data = array();
                         $data['tripId'] = $trip['tripId'];
                         ?>
-                        <button class="btn btn-primary btn-sm">
-                            <span class="glyphicon glyphicon-list-alt"></span>
-                        </button>
                         <button class="btn btn-danger btn-sm" data-data=<?php echo json_encode($data)?> >
                             <i class="fa fa-remove"></i>
                         </button>

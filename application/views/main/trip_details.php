@@ -6,21 +6,35 @@
  * Time: 9:42 PM
  */
 ?>
-<div class="col-md-10 content-div">
+<div class="col-md-10 content-div" ng-app="tripManager" ng-controller="trip">
+    <div class="row hidden-print">
+        <div class="notification-container" ng-show="alert.show">
+            <div class="notification-message">
+                <button type="button" class="close" ng-click="hideAlert()" ><span aria-hidden="true">&times;</span></button>
+                <span class='message'>{{alert.message}}</span>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-5">
-            <select class="form-control">
+            <select class="form-control" ng-model="tripId">
                 <option value>-- Select Trip --</option>
-                <option value="2">Trip to Goa | 2015-03-01</option>
+                <?php foreach($trips as $trip){?>
+                    <option value=<?php echo $trip['tripId']?> > <?php echo $trip['tripName']?>  </option>
+                <?php } ?>
             </select>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-primary" ng-click="fetchTripData()" ><i class="fa fa-refresh"></i> Refresh</button>
         </div>
     </div>
     <hr>
-    <div class="text-center">
+    <div class="text-center" ng-show="showDetails">
         <h4>Trip Name</h4>
     </div>
     <br>
-    <div class="row">
+    <div class="row" ng-show="showDetails">
         <div class="col-md-5">
             <div class="row">
                 <div class="col-md-12">
@@ -38,9 +52,9 @@
                     </tr>
                     </thead>
                     <tbody >
-                    <tr>
-                        <td>1</td>
-                        <td>Udbhav</td>
+                    <tr ng-repeat="member in members">
+                        <td>{{$index+1}}</td>
+                        <td>{{member.memberName}}</td>
                         <td class="text-center" >
                             <button class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-list-alt"></span>
@@ -78,7 +92,6 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <?php for($i=0;$i<100;$i++){?>
                     <tr>
                         <td>1</td>
                         <td>Bus Ticket</td>
@@ -92,7 +105,6 @@
                             </button>
                         </td>
                     </tr>
-                    <?php } ?>
                     </tbody>
                 </table>
             </div>

@@ -10,8 +10,11 @@ class Main extends CI_Controller {
 			redirect('auth/login');
 		}
 		$this->load->model(array(
-			'trips_model'
+			'trips_model',
+			'members_model'
 		));
+
+		$this->lang->load('error_success_messages');
 	}
 
 	public function index(){
@@ -23,7 +26,9 @@ class Main extends CI_Controller {
 	}
 
 	public function tripDetails(){
+		$trips = $this->trips_model->getTrips();
 		$data = array();
+		$data['trips'] = $this->parseTrips($trips);
 		$data['tab']='trip details';
 		$this->helper->_render_page('main/trip_details',$data);
 	}
@@ -31,6 +36,34 @@ class Main extends CI_Controller {
 	public function deleteTrip(){
 
 	}
+
+	public function getTripData(){
+		$tripId = json_decode($this->input->post('tripId'));
+
+		if(empty($tripId)) {
+			echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+			return;
+		}
+
+		$members = $this->members_model->getTripMembers($tripId);
+
+		$data=array();
+		$data['members'] = $members;
+		echo $this->helper->showSuccess($this->lang->line('SuccessDataRetrieval'),$data);
+		return;
+	}
+
+	private function parseTrips( $trips ){
+		$data=array();
+		$row=array();
+		foreach($trips as $trip){
+			$row['tripId'] = $trip['tripId'];
+			$row['tripName'] = $trip['tripName'].' | '.$trip['date'];
+			array_push($data,$row);
+		}
+		return $data;
+	}
+
 }
 
 /* End of file main.php */
