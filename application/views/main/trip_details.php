@@ -43,7 +43,7 @@
             </div>
             <br>
             <div class="table-responsive" style="overflow-y: scroll; height: 500px">
-                <table class="table" >
+                <table class="table table-striped" >
                     <thead>
                     <tr>
                         <th>#</th>
@@ -70,7 +70,7 @@
             <hr>
             <div class="row">
                 <div class="col-md-12">
-                    Total Members : <b>1</b>
+                    Total Members : <b>{{members.length}}</b>
                 </div>
             </div>
         </div>
@@ -82,7 +82,7 @@
             </div>
             <br>
             <div class="table-responsive" style="overflow-y: scroll; height: 500px">
-                <table class="table">
+                <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>#</th>
@@ -113,7 +113,7 @@
             <hr>
             <div class="row">
                 <div class="col-md-12">
-                    Total Trip Expense : <b>Rs 2000</b>
+                    Total Trip Expense : <b ng-bind="calculateTotalExpense()"></b>
                 </div>
             </div>
         </div>

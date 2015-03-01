@@ -54,6 +54,14 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
                 $scope.alert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
             });
         };
+
+    $scope.calculateTotalExpense = function calculateTotalExpense(){
+        var sum=0;
+        for(i=0;i<$scope.expenses.length;i++)
+            sum+=parseFloat($scope.expenses[i].amount);
+        return "Rs "+sum;
+    }
+
     $scope.hideAlert=function hideAlert(){
         $scope.alert.show=false;
     }
