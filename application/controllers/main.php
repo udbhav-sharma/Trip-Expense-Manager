@@ -11,7 +11,8 @@ class Main extends CI_Controller {
 		}
 		$this->load->model(array(
 			'trips_model',
-			'members_model'
+			'members_model',
+			'expenses_model'
 		));
 
 		$this->lang->load('error_success_messages');
@@ -45,10 +46,14 @@ class Main extends CI_Controller {
 			return;
 		}
 
+		$trip = $this->trips_model->getTripDetails($tripId);
 		$members = $this->members_model->getTripMembers($tripId);
+		$expenses = $this->expenses_model->getTripExpenses($tripId);
 
 		$data=array();
+		$data['trip'] = $trip;
 		$data['members'] = $members;
+		$data['expenses'] = $expenses;
 		echo $this->helper->showSuccess($this->lang->line('SuccessDataRetrieval'),$data);
 		return;
 	}

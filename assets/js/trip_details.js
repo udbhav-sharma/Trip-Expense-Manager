@@ -17,7 +17,9 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
     $scope.CONSTANTS=CONSTANTS;
     $scope.alert=alert.initializeAlert();
 
+    $scope.trip = {tripId:'', tripName:'', date:''};
     $scope.members = [];
+    $scope.expenses = [];
 
     $scope.fetchTripData = function fetchTripData(){
 
@@ -40,6 +42,9 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
                     //$scope.alert=alert.successAlert( data.message );
                     $scope.hideAlert();
                     $scope.showDetails=true;
+                    $scope.trip = data.data.trip;
+                    $scope.members = data.data.members;
+                    $scope.expenses = data.data.expenses;
                 }
                 else{
                     $scope.alert=alert.errorAlert( data.message );

@@ -31,7 +31,7 @@
     </div>
     <hr>
     <div class="text-center" ng-show="showDetails">
-        <h4>Trip Name</h4>
+        <h4>{{trip.tripName}}</h4>
     </div>
     <br>
     <div class="row" ng-show="showDetails">
@@ -87,15 +87,17 @@
                     <tr>
                         <th>#</th>
                         <th>Expenses</th>
+                        <th>Date</th>
                         <th>Amount</th>
                         <th class="text-center">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Bus Ticket</td>
-                        <td>157</td>
+                    <tr ng-repeat="expense in expenses">
+                        <td>{{$index+1}}</td>
+                        <td>{{expense.expenseName}}</td>
+                        <td>{{expense.date}}</td>
+                        <td>{{expense.amount}}</td>
                         <td class="text-center" >
                             <button class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-list-alt"></span>

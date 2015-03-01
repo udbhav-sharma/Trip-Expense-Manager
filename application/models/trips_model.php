@@ -27,6 +27,24 @@ class Trips_model extends CI_Model{
             return json_encode($query->result('array'));
         return $query->result('array');
     }
+
+    public function getTripDetails( $tripId, $isJson=false, $isObject = false ){
+        $query = $this->db_trips->select('
+                                            id as tripId,
+                                            DATE(date) as date,
+                                            name as tripName
+                                        ')
+                                ->where(array('id' => $tripId))
+                                ->get($this->tables['trips']);
+        if($query->num_rows==1) {
+            if ($isObject)
+                return $query->first_row();
+            elseif ($isJson)
+                return json_encode($query->first_row('array'));
+            return $query->first_row('array');
+        }
+        return false;
+    }
 }
 
 ?>
