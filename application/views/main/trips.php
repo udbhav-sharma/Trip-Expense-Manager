@@ -9,7 +9,7 @@
 <?php
 //print_r($trips);
 ?>
-<div class="col-md-9 content-div">
+<div class="col-md-8 content-div">
     <div class="row">
         <div class="col-md-12">
             <button class="btn btn-default"><i class="fa fa-cab"></i> New Trip</button>

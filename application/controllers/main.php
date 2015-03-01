@@ -22,16 +22,10 @@ class Main extends CI_Controller {
 		$this->helper->_render_page('main/trips',$data);
 	}
 
-	public function newTrip(){
+	public function tripDetails(){
 		$data = array();
-		$data['tab']='new trip';
-		$this->helper->_render_page('main/new_trip',$data);
-	}
-
-	public function editTrip(){
-		$data = array();
-		$data['tab']=null;
-		$this->helper->_render_page('main/edit_trip',$data);
+		$data['tab']='trip details';
+		$this->helper->_render_page('main/trip_details',$data);
 	}
 
 	public function deleteTrip(){

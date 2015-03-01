@@ -9,5 +9,6 @@
 <div class="col-md-2">
     <ul class="list-group">
         <li class="list-group-item <?php if($tab=="my trips") echo 'active';?>"><a href="<?php echo base_url()?>">My Trips</a></li>
+        <li class="list-group-item <?php if($tab=="trip details") echo 'active';?>"><a href="<?php echo base_url('main/tripDetails')?>">Trip Details</a></li>
     </ul>
 </div>
