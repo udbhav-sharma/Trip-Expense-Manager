@@ -16,6 +16,7 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
     $scope.showDetails = false;
     $scope.CONSTANTS=CONSTANTS;
     $scope.alert=alert.initializeAlert();
+    $scope.expenseModalAlert=alert.initializeAlert();
 
     $scope.trip = {tripId:'', tripName:'', date:''};
     $scope.members = [];
@@ -52,7 +53,11 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
             .error(function(data, status) {
                 $scope.alert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
             });
-        }
+    }
+
+    $scope.hideAlert=function hideAlert(){
+        $scope.alert.show=false;
+    }
 
     $scope.calculateTotalExpense = function calculateTotalExpense(){
         var sum=0;
@@ -91,21 +96,43 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
         members:[],
         amount:'',
         expenseName:'',
-        expenseOption:1
+        expenseOption:1,
+        expenseDate:''
     };
 
-    $scope.memberExpenseMapping = function memberExpenseMapping(memberId){
-        var index = $scope.expenseOb.members.indexOf(memberId);
-        if(index == -1)
-            $scope.expenseOb.members.push(memberId);
-        else
-            $scope.expenseOb.members.splice(index,1);
+    $scope.getExpenseOb = function getExpenseOb(obType,expenseId){
+        $scope.alert = alert.successAlert( $scope.CONSTANTS.LOADING );
+        $http({
+            method:'POST',
+            url:'getExpenseOb',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            },
+            data:{obType:obType,expenseId:expenseId}
+        })
+            .success(function(data, status) {
+                console.log(data);
+                if(data.code ==  $scope.CONSTANTS.SUCCESS_CODE ){
+                    $scope.expenseOb = data.data;
+                    $scope.hideAlert();
+                }
+                else{
+                    $scope.alert=alert.errorAlert( data.message );
+                }
+            })
+            .error(function(data, status) {
+                $scope.alert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
+            });
     }
 
     $scope.saveExpense = function saveExpense(){
         console.log($scope.expenseOb);
 
-        $scope.alert = alert.successAlert( $scope.CONSTANTS.LOADING );
+        $scope.expenseModalAlert = alert.successAlert( $scope.CONSTANTS.LOADING );
         $http({
             method:'POST',
             url:'addExpense',
@@ -120,19 +147,20 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
         })
             .success(function(data, status) {
                 if(data.code ==  $scope.CONSTANTS.SUCCESS_CODE ){
-                    //$scope.alert=alert.successAlert( data.message );
-                    $scope.hideAlert();;
+                    $scope.expenseModalAlert=alert.successAlert( data.message );
+                    $scope.hideExpenseModalAlert();
                 }
                 else{
-                    $scope.alert=alert.errorAlert( data.message );
+                    $scope.expenseModalAlert=alert.errorAlert( data.message );
                 }
             })
             .error(function(data, status) {
-                $scope.alert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
+                $scope.expenseModalAlert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
             });
     }
 
-    $scope.hideAlert=function hideAlert(){
-        $scope.alert.show=false;
+    $scope.hideExpenseModalAlert=function hideExpenseModalAlert(){
+        $scope.expenseModalAlert.show=false;
     }
+
 });

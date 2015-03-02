@@ -80,7 +80,7 @@
         <div class="col-md-7">
             <div class="row">
                 <div class="col-md-12">
-                    <button type="button" class="btn btn-default"  data-toggle="modal" data-target="#expenseModal">
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#expenseModal" ng-click="getExpenseOb(1,-1)">
                         <i class="fa fa-rupee"></i> New Expense
                     </button>
                 </div>
@@ -104,7 +104,7 @@
                         <td>{{expense.date}}</td>
                         <td>{{expense.amount}}</td>
                         <td class="text-center" >
-                            <button type="button" class="btn btn-primary btn-sm">
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#expenseModal" ng-click="getExpenseOb(2, expense.expenseId)">
                                 <span class="glyphicon glyphicon-list-alt"></span>
                             </button>
                             <button type="button" class="btn btn-danger btn-sm">
@@ -128,6 +128,16 @@
     <div class="modal fade" id="expenseModal" tabindex="-1" role="dialog" aria-labelledby="expenseModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+
+                <div class="row hidden-print">
+                    <div class="notification-container" ng-show="expenseModalAlert.show">
+                        <div class="notification-message">
+                            <button type="button" class="close" ng-click="hideExpenseModalAlert()" ><span aria-hidden="true">&times;</span></button>
+                            <span class='message'>{{expenseModalAlert.message}}</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="expenseModalLabel"> New Expense </h4>
@@ -143,10 +153,10 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="member in members">
+                                    <tr ng-repeat="member in expenseOb.members">
                                         <td>{{member.memberName}}</td>
                                         <td class="text-center">
-                                            <input type="checkbox" ng-click="memberExpenseMapping(member.memberId)">
+                                            <input type="checkbox" ng-model="member.flag">
                                         </td>
                                     </tr>
                                 </tbody>
@@ -155,7 +165,7 @@
                         <div class="col-md-7">
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="expenseOption" ng-model="expenseOb.expenseOption" value="1" checked>
+                                    <input type="radio" name="expenseOption" ng-model="expenseOb.expenseOption" value="1">
                                     Total Expense
                                 </label>
                             </div>
@@ -169,6 +179,11 @@
                             <div class="row form-group">
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" ng-model="expenseOb.expenseName" placeholder="Expense Name">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-sm-10">
+                                    <input type="text" id="expenseDate" class="form-control" ng-model="expenseOb.expenseDate" placeholder="Enter Date">
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -194,3 +209,6 @@
         </div>
     </div>
 </div>
+<script>
+    $("#expenseDate").datepicker();
+</script>

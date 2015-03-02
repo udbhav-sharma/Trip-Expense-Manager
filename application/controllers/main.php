@@ -12,7 +12,8 @@ class Main extends CI_Controller {
 		$this->load->model(array(
 			'trips_model',
 			'members_model',
-			'expenses_model'
+			'expenses_model',
+            'member_expense_model'
 		));
 
 		$this->lang->load('error_success_messages');
@@ -108,31 +109,96 @@ class Main extends CI_Controller {
 
     }
 
+    public function getExpenseOb(){
+        $obType = $this->input->post('obType');
+        $tripId = $this->session->userdata('tripId');
+
+        $members = $this->members_model->getTripMembers($tripId);
+
+        foreach($members as $index => $value){
+            $members[$index]['flag']=false;
+        }
+
+        $expenseOb = new stdClass();
+        $expenseOb->expenseDate = date("Y-m-d");
+        if($obType==1){
+            $expenseOb->members = $members;
+            $expenseOb->amount = '';
+            $expenseOb->expenseName = '';
+            $expenseOb->expenseOption = 1;
+            $expenseOb->obType = 1;
+            echo $this->helper->showSuccess($this->lang->line('SuccessFormExpenseObject'),$expenseOb);
+        }
+        elseif($obType==2){
+            $expenseId = $this->input->post('expenseId');
+
+            if(empty($expenseId)){
+                echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+                return;
+            }
+
+            $expense = $this->expenses_model->getExpenseDetails($expenseId);
+            $memberIds = $this->member_expense_model->getMemberOfExpense($expenseId);
+
+            if($memberIds && $members)
+            foreach($memberIds as $memberId){
+                foreach($members as $index => $value){
+                    if($value['memberId'] == $memberId['memberId'])
+                        $members[$index]['flag'] = true;
+                }
+            }
+
+            $expenseOb->members = $members;
+            $expenseOb->amount = $expense['amount'];
+            $expenseOb->expenseName = $expense['expenseName'];
+            $expenseOb->expenseOption = $expense['expenseOption'];
+            $expenseOb->obType = 2;
+            echo $this->helper->showSuccess($this->lang->line('SuccessFormExpenseObject'),$expenseOb);
+        }
+        else{
+            echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+        }
+    }
+
     public function addExpense(){
         $tripId = $this->session->userdata('tripId');
 
         $expense = json_decode($this->input->post('expense'));
 
-        $memberIds = $expense->members;
+        $members = $expense->members;
         $expenseName = $expense->expenseName;
         $amount = $expense->amount;
         $expenseOption = $expense->expenseOption;
+        $expenseDate = $expense->expenseDate;
+        $obType = $expense->obType;
 
-        if(empty($expenseName) || empty($amount) || empty($expenseOption)){
-            echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
-            return;
+        $memberIds = array();
+        foreach($members as $member){
+            if($member->flag)
+                array_push($memberIds,$member->memberId);
         }
 
-        $expenseId = $this->expenses_model->addExpense( $tripId, $expenseName, $amount, $expenseOption );
-        if($expenseId) {
-            if($this->expenses_model->addMemberToExpense( $expenseId, $memberIds )){
-                echo $this->helper->showSuccess($this->lang->line('SuccessExpenseCreation'));
+        if($obType==1) {
+
+            if (empty($expenseName) || empty($amount) || empty($expenseOption) || empty($expenseDate)) {
+                echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
                 return;
             }
-        }
 
-        echo $this->helper->showError($this->lang->line('ErrorExpenseCreation'));
-        return;
+            $expenseId = $this->expenses_model->addExpense($tripId, $expenseName, $amount, $expenseOption, $expenseDate);
+            if ($expenseId) {
+                if ($this->member_expense_model->addMemberToExpense($expenseId, $memberIds)) {
+                    echo $this->helper->showSuccess($this->lang->line('SuccessExpenseCreation'));
+                    return;
+                }
+            }
+
+            echo $this->helper->showError($this->lang->line('ErrorExpenseCreation'));
+            return;
+        }
+        elseif($obType==2){
+
+        }
     }
 
     public function deleteExpense(){

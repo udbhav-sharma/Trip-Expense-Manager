@@ -28,5 +28,13 @@ class Members_model extends CI_Model{
             return json_encode($query->result('array'));
         return $query->result('array');
     }
+
+    public function deleteMember( $memberId ){
+        $this->db_trips->delete($this->tables['members'],array('id' => $memberId));
+        if($this->db_trips->affected_rows()>0)
+            return true;
+        return false;
+    }
+
 }
 ?>

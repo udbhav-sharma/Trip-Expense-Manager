@@ -19,7 +19,8 @@ class Expenses_model extends CI_Model{
                                             tripId,
                                             name as expenseName,
                                             amount,
-                                            DATE(date) as date
+                                            option as expenseOption,
+                                            date
                                         ')
             ->where(array( 'tripId' => $tripId ))
             ->get($this->tables['expenses']);
@@ -30,12 +31,37 @@ class Expenses_model extends CI_Model{
         return $query->result('array');
     }
 
-    public function addExpense( $tripId, $expenseName, $amount, $expenseOption ){
+    public function getExpenseDetails( $expenseId, $isJson=false, $isObject = false ){
+        $query = $this->db_trips->select('
+                                            id as expenseId,
+                                            tripId,
+                                            name as expenseName,
+                                            amount,
+                                            option as expenseOption,
+                                            date
+                                        ')
+                                ->where(array( 'id' => $expenseId ))
+                                ->get($this->tables['expenses']);
+        if($query->num_rows==1) {
+            if ($isObject)
+                return $query->first_row();
+            elseif ($isJson)
+                return json_encode($query->first_row('array'));
+            return $query->first_row('array');
+        }
+        return false;
+    }
+
+    public function addExpense( $tripId, $expenseName, $amount, $expenseOption, $expenseDate ){
+        $expenseDate = strtotime($expenseDate);
+        $expenseDate = date('Y-m-d',$expenseDate);
+
         $data = array(
             'tripId' => $tripId,
             'name' => $expenseName,
             'amount' => $amount,
-            'option' => $expenseOption
+            'option' => $expenseOption,
+            'date' => $expenseDate
         );
 
         $this->db_trips->insert($this->tables['expenses'],$data);
@@ -44,26 +70,11 @@ class Expenses_model extends CI_Model{
         return FALSE;
     }
 
-
-    public function addMemberToExpense( $expenseId, $memberIds ){
-        $data = array(
-            'expenseId' => $expenseId
-        );
-
-        $this->db_trips->trans_begin();
-
-        foreach($memberIds as $memberId) {
-            $data['memberId'] = $memberId;
-            $this->db_trips->insert($this->tables['memberExpense'], $data);
-            if ($this->db_trips->affected_rows() == 0) {
-                $this->db_trips->trans_rollback();
-                return FALSE;
-            }
-        }
-
-        $this->db_trips->trans_commit();
-        return true;
+    public function deleteExpense( $expenseId ){
+        $this->db_trips->delete($this->tables['expenses'],array('id' => $expenseId));
+        if($this->db_trips->affected_rows()>0)
+            return true;
+        return false;
     }
-
 }
 ?>
