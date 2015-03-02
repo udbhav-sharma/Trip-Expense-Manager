@@ -50,6 +50,8 @@ class Main extends CI_Controller {
 		$members = $this->members_model->getTripMembers($tripId);
 		$expenses = $this->expenses_model->getTripExpenses($tripId);
 
+        $this->session->set_userdata(array('tripId'=>$tripId));
+
 		$data=array();
 		$data['trip'] = $trip;
 		$data['members'] = $members;
@@ -57,6 +59,15 @@ class Main extends CI_Controller {
 		echo $this->helper->showSuccess($this->lang->line('SuccessDataRetrieval'),$data);
 		return;
 	}
+
+	public function getNewExpense(){
+        $members = $this->members_model->getTripMembers($this->session->userdata('tripId'));
+
+        $data=array();
+        $data['members'] = $members;
+
+        $this->load->view('main/new_expense',$data);
+    }
 
 	private function parseTrips( $trips ){
 		$data=array();

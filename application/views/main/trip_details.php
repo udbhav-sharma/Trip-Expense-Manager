@@ -26,7 +26,7 @@
             </select>
         </div>
         <div class="col-md-4">
-            <button class="btn btn-primary" ng-click="fetchTripData()" ><i class="fa fa-refresh"></i> Refresh</button>
+            <button type="button" class="btn btn-primary" ng-click="fetchTripData()" ><i class="fa fa-refresh"></i> Refresh</button>
         </div>
     </div>
     <hr>
@@ -38,7 +38,7 @@
         <div class="col-md-5">
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-default"><i class="fa fa-user-plus"></i> New Member</button>
+                    <button type="button" class="btn btn-default"><i class="fa fa-user-plus"></i> New Member</button>
                 </div>
             </div>
             <br>
@@ -56,10 +56,10 @@
                         <td>{{$index+1}}</td>
                         <td>{{member.memberName}}</td>
                         <td class="text-center" >
-                            <button class="btn btn-primary btn-sm">
+                            <button type="button" class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-list-alt"></span>
                             </button>
-                            <button class="btn btn-danger btn-sm">
+                            <button type="button" class="btn btn-danger btn-sm">
                                 <i class="fa fa-remove"></i>
                             </button>
                         </td>
@@ -77,7 +77,9 @@
         <div class="col-md-7">
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-default"><i class="fa fa-rupee"></i> New Expense</button>
+                    <button type="button" class="btn btn-default"  data-toggle="modal" data-target="#myModal" ng-click="loadModal('getNewExpense',{},'New Expense')">
+                        <i class="fa fa-rupee"></i> New Expense
+                    </button>
                 </div>
             </div>
             <br>
@@ -99,10 +101,10 @@
                         <td>{{expense.date}}</td>
                         <td>{{expense.amount}}</td>
                         <td class="text-center" >
-                            <button class="btn btn-primary btn-sm">
+                            <button type="button" class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-list-alt"></span>
                             </button>
-                            <button class="btn btn-danger btn-sm">
+                            <button type="button" class="btn btn-danger btn-sm">
                                 <i class="fa fa-remove"></i>
                             </button>
                         </td>
@@ -118,4 +120,23 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{modal.heading}}</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

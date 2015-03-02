@@ -20,6 +20,7 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
     $scope.trip = {tripId:'', tripName:'', date:''};
     $scope.members = [];
     $scope.expenses = [];
+    $scope.modal = {heading:''};
 
     $scope.fetchTripData = function fetchTripData(){
 
@@ -53,13 +54,41 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
             .error(function(data, status) {
                 $scope.alert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
             });
-        };
+        }
 
     $scope.calculateTotalExpense = function calculateTotalExpense(){
         var sum=0;
         for(i=0;i<$scope.expenses.length;i++)
             sum+=parseFloat($scope.expenses[i].amount);
         return "Rs "+sum;
+    }
+
+    $scope.loadModal = function loadModal(url,data,heading){
+
+        $scope.alert = alert.successAlert( $scope.CONSTANTS.LOADING );
+        $scope.modal.heading = heading;
+
+        $http({
+            method:'POST',
+            url:url,
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            },
+            data:data
+        })
+            .success(function(data, status) {
+                console.log(data);
+                //$scope.alert=alert.successAlert( data.message );
+                $scope.hideAlert();
+                $('.modal-body').html(data);
+            })
+            .error(function(data, status) {
+                $scope.alert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
+            });
     }
 
     $scope.hideAlert=function hideAlert(){
