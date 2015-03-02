@@ -6,13 +6,12 @@
  * Time: 3:57 PM
  */
 ?>
-<?php
-//print_r($trips);
-?>
+<script src="<?php echo base_url().'assets/js/trips.js'?>"></script>
+
 <div class="col-md-8 content-div">
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-default"><i class="fa fa-cab"></i> New Trip</button>
+            <button class="btn btn-default"  data-toggle="modal" data-target="#genericModal"><i class="fa fa-cab"></i> New Trip</button>
         </div>
     </div>
     <div class="table-responsive">
@@ -47,5 +46,44 @@
             <?php } ?>
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="genericModal" tabindex="-1" role="dialog" aria-labelledby="genericModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="row hidden-print">
+                <div class="notification-container new-trip-alert" style="display: none">
+                    <div class="notification-message">
+                        <button type="button" class="close btn-close-alert hidden-print" ><span aria-hidden="true">&times;</span></button>
+                        <span class='message'></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="genericModalLabel"> New Trip </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-offset-2 col-md-8">
+                        <input type="text" class="form-control" id="tripName" placeholder="Trip Name">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-offset-2 col-md-8">
+                        <input type="text" id="tripDate" class="form-control" placeholder="Trip Date">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary save">Save changes</button>
+            </div>
+        </div>
     </div>
 </div>

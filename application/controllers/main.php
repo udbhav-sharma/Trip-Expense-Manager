@@ -38,10 +38,43 @@ class Main extends CI_Controller {
 
     public function addTrip(){
 
+        $userId = $this->session->userdata('user_id');
+
+        $tripName = $this->input->post('tripName');
+        $tripDate = $this->input->post('tripDate');
+
+        if(empty($tripName) || empty($tripDate)){
+            echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+            return;
+        }
+
+        $tripId = $this->trips_model->addTrip( $userId, $tripName, $tripDate );
+        if($tripId) {
+            echo $this->helper->showSuccess($this->lang->line('SuccessTripCreation'),array('tripId'=>$tripId,'date'=>$tripDate));
+            return;
+        }
+
+        echo $this->helper->showError($this->lang->line('ErrorTripCreation'));
+        return;
     }
 
 	public function deleteTrip(){
 
+        $userId = $this->session->userdata('user_id');
+        $tripId = $this->input->post('tripId');
+
+        if(empty($tripId)){
+            echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+            return;
+        }
+
+        if($this->trips_model->deleteTrip( $userId, $tripId )){
+            echo $this->helper->showError($this->lang->line('SuccessTripDeletion'));
+            return;
+        }
+
+        echo $this->helper->showError($this->lang->line('ErrorTripDeletion'));
+        return;
 	}
 
 	public function getTripData(){

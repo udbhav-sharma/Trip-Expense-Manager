@@ -46,6 +46,29 @@ class Trips_model extends CI_Model{
         }
         return false;
     }
+
+    public function addTrip( $userId, $tripName, $tripDate ){
+        $tripDate = strtotime($tripDate);
+        $tripDate = date('Y-m-d',$tripDate);
+        
+        $data = array(
+            'userId' => $userId,
+            'name' => $tripName,
+            'date' => $tripDate
+        );
+
+        $this->db_trips->insert($this->tables['trips'],$data);
+        if($this->db_trips->affected_rows() > 0 )
+            return $this->db_trips->insert_id();
+        return FALSE;
+    }
+
+    public function deleteTrip( $userId, $tripId ){
+        $this->db_trips->delete($this->tables['trips'],array('id' => $tripId, 'userId' => $userId));
+        if($this->db_trips->affected_rows()>0)
+            return true;
+        return false;
+    }
 }
 
 ?>
