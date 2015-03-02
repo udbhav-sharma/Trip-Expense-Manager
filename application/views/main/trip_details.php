@@ -41,7 +41,7 @@
         <div class="col-md-5">
             <div class="row">
                 <div class="col-md-12">
-                    <button type="button" class="btn btn-default"><i class="fa fa-user-plus"></i> New Member</button>
+                    <button type="button" class="btn btn-default" disabled><i class="fa fa-user-plus"></i> New Member</button>
                 </div>
             </div>
             <br>
@@ -59,10 +59,10 @@
                         <td>{{$index+1}}</td>
                         <td>{{member.memberName}}</td>
                         <td class="text-center" >
-                            <button type="button" class="btn btn-primary btn-sm">
+                            <button type="button" class="btn btn-primary btn-sm" disabled>
                                 <span class="glyphicon glyphicon-list-alt"></span>
                             </button>
-                            <button type="button" class="btn btn-danger btn-sm">
+                            <button type="button" class="btn btn-danger btn-sm" disabled>
                                 <i class="fa fa-remove"></i>
                             </button>
                         </td>
@@ -107,7 +107,7 @@
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#expenseModal" ng-click="getExpenseOb(2, expense.expenseId)">
                                 <span class="glyphicon glyphicon-list-alt"></span>
                             </button>
-                            <button type="button" class="btn btn-danger btn-sm">
+                            <button type="button" class="btn btn-danger btn-sm" disabled>
                                 <i class="fa fa-remove"></i>
                             </button>
                         </td>

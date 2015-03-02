@@ -148,7 +148,6 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
             .success(function(data, status) {
                 if(data.code ==  $scope.CONSTANTS.SUCCESS_CODE ){
                     $scope.expenseModalAlert=alert.successAlert( data.message );
-                    $scope.hideExpenseModalAlert();
                 }
                 else{
                     $scope.expenseModalAlert=alert.errorAlert( data.message );
