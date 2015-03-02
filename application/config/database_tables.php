@@ -9,4 +9,5 @@
 $config['tables']['trips']  = 'trips';
 $config['tables']['members'] = 'members';
 $config['tables']['expenses'] = 'expenses';
+$config['tables']['memberExpense'] = 'member_expense';
 ?>

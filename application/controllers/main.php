@@ -36,6 +36,10 @@ class Main extends CI_Controller {
 		$this->helper->_render_page('main/trip_details',$data);
 	}
 
+    public function addTrip(){
+
+    }
+
 	public function deleteTrip(){
 
 	}
@@ -63,13 +67,43 @@ class Main extends CI_Controller {
 		return;
 	}
 
-	public function getNewExpense(){
-        $members = $this->members_model->getTripMembers($this->session->userdata('tripId'));
+    public function addMember(){
 
-        $data=array();
-        $data['members'] = $members;
+    }
 
-        $this->load->view('main/new_expense',$data);
+    public function deleteMember(){
+
+    }
+
+    public function addExpense(){
+        $tripId = $this->session->userdata('tripId');
+
+        $expense = json_decode($this->input->post('expense'));
+
+        $memberIds = $expense->members;
+        $expenseName = $expense->expenseName;
+        $amount = $expense->amount;
+        $expenseOption = $expense->expenseOption;
+
+        if(empty($expenseName) || empty($amount) || empty($expenseOption)){
+            echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+            return;
+        }
+
+        $expenseId = $this->expenses_model->addExpense( $tripId, $expenseName, $amount, $expenseOption );
+        if($expenseId) {
+            if($this->expenses_model->addMemberToExpense( $expenseId, $memberIds )){
+                echo $this->helper->showSuccess($this->lang->line('SuccessExpenseCreation'));
+                return;
+            }
+        }
+
+        echo $this->helper->showError($this->lang->line('ErrorExpenseCreation'));
+        return;
+    }
+
+    public function deleteExpense(){
+
     }
 
 	private function parseTrips( $trips ){

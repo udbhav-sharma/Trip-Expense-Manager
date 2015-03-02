@@ -29,5 +29,41 @@ class Expenses_model extends CI_Model{
             return json_encode($query->result('array'));
         return $query->result('array');
     }
+
+    public function addExpense( $tripId, $expenseName, $amount, $expenseOption ){
+        $data = array(
+            'tripId' => $tripId,
+            'name' => $expenseName,
+            'amount' => $amount,
+            'option' => $expenseOption
+        );
+
+        $this->db_trips->insert($this->tables['expenses'],$data);
+        if($this->db_trips->affected_rows() > 0 )
+            return $this->db_trips->insert_id();
+        return FALSE;
+    }
+
+
+    public function addMemberToExpense( $expenseId, $memberIds ){
+        $data = array(
+            'expenseId' => $expenseId
+        );
+
+        $this->db_trips->trans_begin();
+
+        foreach($memberIds as $memberId) {
+            $data['memberId'] = $memberId;
+            $this->db_trips->insert($this->tables['memberExpense'], $data);
+            if ($this->db_trips->affected_rows() == 0) {
+                $this->db_trips->trans_rollback();
+                return FALSE;
+            }
+        }
+
+        $this->db_trips->trans_commit();
+        return true;
+    }
+
 }
 ?>

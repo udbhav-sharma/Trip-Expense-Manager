@@ -20,7 +20,6 @@
     <script src="<?php echo base_url().'assets/todc-bootstrap/js/bootstrap.min.js'?>"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
     <script src="<?php echo base_url().'assets/js/alert.js'?>"></script>
-    <script src="<?php echo base_url().'assets/js/trip_details.js'?>"></script>
 
 </head>
 <body>
