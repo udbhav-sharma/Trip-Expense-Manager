@@ -69,7 +69,7 @@ class Main extends CI_Controller {
         }
 
         if($this->trips_model->deleteTrip( $userId, $tripId )){
-            echo $this->helper->showError($this->lang->line('SuccessTripDeletion'));
+            echo $this->helper->showSuccess($this->lang->line('SuccessTripDeletion'));
             return;
         }
 

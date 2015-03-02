@@ -9,13 +9,23 @@
 <script src="<?php echo base_url().'assets/js/trips.js'?>"></script>
 
 <div class="col-md-8 content-div">
+
+    <div class="row hidden-print">
+        <div class="notification-container alert" style="display: none">
+            <div class="notification-message">
+                <button type="button" class="close btn-close-alert hidden-print" ><span aria-hidden="true">&times;</span></button>
+                <span class='message'></span>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-12">
             <button class="btn btn-default"  data-toggle="modal" data-target="#genericModal"><i class="fa fa-cab"></i> New Trip</button>
         </div>
     </div>
     <div class="table-responsive">
-        <table class="table">
+        <table class="table" id="trips-table">
             <thead>
             <tr>
                 <th>#</th>
@@ -34,11 +44,7 @@
                     <td><?php echo $trip['date']; ?></td>
                     <td><?php echo $trip['tripName']; ?></td>
                     <td class="text-center">
-                        <?php
-                        $data = array();
-                        $data['tripId'] = $trip['tripId'];
-                        ?>
-                        <button class="btn btn-danger btn-sm" data-data=<?php echo json_encode($data)?> >
+                        <button class="btn btn-danger btn-sm remove" data-tripid=<?php echo $trip['tripId']; ?> >
                             <i class="fa fa-remove"></i>
                         </button>
                     </td>

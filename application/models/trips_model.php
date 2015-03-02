@@ -50,7 +50,7 @@ class Trips_model extends CI_Model{
     public function addTrip( $userId, $tripName, $tripDate ){
         $tripDate = strtotime($tripDate);
         $tripDate = date('Y-m-d',$tripDate);
-        
+
         $data = array(
             'userId' => $userId,
             'name' => $tripName,
