@@ -14,12 +14,13 @@ class Trips_model extends CI_Model{
         $this->tables = $this->config->item('tables', 'database_tables');
     }
 
-    public function getTrips( $isJson=false, $isObject = false ){
+    public function getTrips( $userId, $isJson=false, $isObject = false ){
         $query = $this->db_trips->select('
                                             id as tripId,
                                             DATE(date) as date,
                                             name as tripName
                                         ')
+                                ->where(array('userId'=>$userId))
                                 ->get($this->tables['trips']);
         if($isObject)
             return $query->result();
@@ -28,13 +29,13 @@ class Trips_model extends CI_Model{
         return $query->result('array');
     }
 
-    public function getTripDetails( $tripId, $isJson=false, $isObject = false ){
+    public function getTripDetails( $userId, $tripId, $isJson=false, $isObject = false ){
         $query = $this->db_trips->select('
                                             id as tripId,
                                             DATE(date) as date,
                                             name as tripName
                                         ')
-                                ->where(array('id' => $tripId))
+                                ->where(array('id' => $tripId, 'userId' => $userId))
                                 ->get($this->tables['trips']);
         if($query->num_rows==1) {
             if ($isObject)

@@ -19,7 +19,8 @@ class Main extends CI_Controller {
 	}
 
 	public function index(){
-		$trips = $this->trips_model->getTrips();
+        $userId = $this->session->userdata('user_id');
+		$trips = $this->trips_model->getTrips($userId);
 		$data = array();
 		$data['tab'] = 'my trips';
 		$data['trips'] = $trips;
@@ -27,7 +28,8 @@ class Main extends CI_Controller {
 	}
 
 	public function tripDetails(){
-		$trips = $this->trips_model->getTrips();
+        $userId = $this->session->userdata('user_id');
+		$trips = $this->trips_model->getTrips($userId);
 		$data = array();
 		$data['trips'] = $this->parseTrips($trips);
 		$data['tab']='trip details';
@@ -39,6 +41,7 @@ class Main extends CI_Controller {
 	}
 
 	public function getTripData(){
+        $userId = $this->session->userdata('user_id');
 		$tripId = json_decode($this->input->post('tripId'));
 
 		if(empty($tripId)) {
@@ -46,7 +49,7 @@ class Main extends CI_Controller {
 			return;
 		}
 
-		$trip = $this->trips_model->getTripDetails($tripId);
+		$trip = $this->trips_model->getTripDetails( $userId, $tripId );
 		$members = $this->members_model->getTripMembers($tripId);
 		$expenses = $this->expenses_model->getTripExpenses($tripId);
 
