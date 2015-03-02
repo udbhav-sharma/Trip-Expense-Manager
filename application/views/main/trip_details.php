@@ -45,7 +45,7 @@
                 </div>
             </div>
             <br>
-            <div class="table-responsive" style="overflow-y: scroll; height: 500px">
+            <div class="table-responsive" style="overflow-y: scroll; max-height: 500px">
                 <table class="table table-striped" >
                     <thead>
                     <tr>
@@ -86,7 +86,7 @@
                 </div>
             </div>
             <br>
-            <div class="table-responsive" style="overflow-y: scroll; height: 500px">
+            <div class="table-responsive" style="overflow-y: scroll; max-height: 500px">
                 <table class="table table-striped">
                     <thead>
                     <tr>
