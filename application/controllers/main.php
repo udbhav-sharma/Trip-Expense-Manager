@@ -122,6 +122,7 @@ class Main extends CI_Controller {
         $expenseOb = new stdClass();
         $expenseOb->expenseDate = date("Y-m-d");
         if($obType==1){
+            $expenseOb->expenseId = '';
             $expenseOb->members = $members;
             $expenseOb->amount = '';
             $expenseOb->expenseName = '';
@@ -148,6 +149,7 @@ class Main extends CI_Controller {
                 }
             }
 
+            $expenseOb->expenseId = $expense['expenseId'];
             $expenseOb->members = $members;
             $expenseOb->amount = $expense['amount'];
             $expenseOb->expenseName = $expense['expenseName'];
@@ -179,12 +181,10 @@ class Main extends CI_Controller {
         }
 
         if($obType==1) {
-
             if (empty($expenseName) || empty($amount) || empty($expenseOption) || empty($expenseDate)) {
                 echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
                 return;
             }
-
             $expenseId = $this->expenses_model->addExpense($tripId, $expenseName, $amount, $expenseOption, $expenseDate);
             if ($expenseId) {
                 if ($this->member_expense_model->addMemberToExpense($expenseId, $memberIds)) {
@@ -192,12 +192,21 @@ class Main extends CI_Controller {
                     return;
                 }
             }
-
             echo $this->helper->showError($this->lang->line('ErrorExpenseCreation'));
             return;
         }
         elseif($obType==2){
-
+            $expenseId = $expense->expenseId;
+            if ($expenseId) {
+                if($this->expenses_model->updateExpense( $expenseId, $expenseName, $amount, $expenseOption, $expenseDate )) {
+                    if ($this->member_expense_model->updateMapping($expenseId, $memberIds)) {
+                        echo $this->helper->showSuccess($this->lang->line('SuccessExpenseUpdate'));
+                        return;
+                    }
+                }
+            }
+            echo $this->helper->showError($this->lang->line('ErrorExpenseUpdate'));
+            return;
         }
     }
 

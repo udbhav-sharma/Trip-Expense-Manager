@@ -19,3 +19,5 @@ $lang['SuccessTripDeletion']='Trip deleted successfully';
 $lang['ErrorExpenseCreation']='Error in creating expense. Please reload/refresh the page and try again.';
 $lang['SuccessExpenseCreation']='Expense created successfully';
 $lang['SuccessFormExpenseObject']='Expense object formed successfully';
+$lang['ErrorExpenseUpdate']='Error in updating expense. Please reload/refresh the page and try again.';
+$lang['SuccessExpenseUpdate']='Expense updated successfully';

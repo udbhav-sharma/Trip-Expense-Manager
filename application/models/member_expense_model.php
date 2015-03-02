@@ -50,5 +50,20 @@ class Member_expense_model extends CI_Model
         }
         return false;
     }
+
+    public function deleteMapping( $expenseId ){
+        $this->db_trips->delete($this->tables['memberExpense'],array('expenseId' => $expenseId));
+        if($this->db_trips->affected_rows()>0)
+            return true;
+        return false;
+    }
+
+    public function updateMapping( $expenseId, $memberIds ){
+        if(!$this->deleteMapping($expenseId))
+            return false;
+        if(!$this->addMemberToExpense($expenseId,$memberIds))
+            return false;
+        return true;
+    }
 }
 ?>

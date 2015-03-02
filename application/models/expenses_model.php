@@ -76,5 +76,24 @@ class Expenses_model extends CI_Model{
             return true;
         return false;
     }
+
+    public function updateExpense($expenseId, $expenseName, $amount, $expenseOption, $expenseDate ){
+        $expenseDate = strtotime($expenseDate);
+        $expenseDate = date('Y-m-d',$expenseDate);
+
+        $data = array(
+            'name' => $expenseName,
+            'amount' => $amount,
+            'option' => $expenseOption,
+            'date' => $expenseDate
+        );
+
+        $this->db_trips->where(array('id'=>$expenseId))
+                       ->update($this->tables['expenses'],$data);
+
+        if($this->db_trips->affected_rows() > 0 )
+            return true;
+        return FALSE;
+    }
 }
 ?>
