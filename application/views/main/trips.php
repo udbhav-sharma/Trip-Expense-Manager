@@ -41,7 +41,7 @@
                 ?>
                 <tr>
                     <td scope="row"><?php echo ++$i; ?></td>
-                    <td><?php echo $trip['date']; ?></td>
+                    <td><?php echo $trip['tripDate']; ?></td>
                     <td><?php echo $trip['tripName']; ?></td>
                     <td class="text-center">
                         <button class="btn btn-danger btn-sm remove" data-tripid=<?php echo $trip['tripId']; ?> >

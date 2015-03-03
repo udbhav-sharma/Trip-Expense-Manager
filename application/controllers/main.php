@@ -37,6 +37,38 @@ class Main extends CI_Controller {
 		$this->helper->_render_page('main/trip_details',$data);
 	}
 
+    public function getTripOb(){
+        $obType = $this->input->post('obType');
+
+        $tripOb = new stdClass();
+        if($obType==1){
+            $tripOb->tripId = '';
+            $tripOb->tripName = '';
+            $tripOb->obType = 1;
+            $tripOb->tripDate = date("Y-m-d");
+            echo $this->helper->showSuccess($this->lang->line('SuccessFormTripObject'),$tripOb);
+        }
+        elseif($obType==2){
+            $tripId = $this->input->post('tripId');
+
+            if(empty($tripId)){
+                echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+                return;
+            }
+
+            $trip = $this->trips_model->getTripDetails($tripId);
+
+            $tripOb->tripId = $trip['tripId'];
+            $tripOb->tripName = $trip['tripName'];
+            $tripOb->obType = 2;
+            $tripOb->tripDate = $trip['tripDate'];
+            echo $this->helper->showSuccess($this->lang->line('SuccessFormTripObject'),$tripOb);
+        }
+        else{
+            echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+        }
+    }
+
     public function addTrip(){
 
         $userId = $this->session->userdata('user_id');
@@ -120,7 +152,6 @@ class Main extends CI_Controller {
         }
 
         $expenseOb = new stdClass();
-        $expenseOb->expenseDate = date("Y-m-d");
         if($obType==1){
             $expenseOb->expenseId = '';
             $expenseOb->members = $members;
@@ -128,6 +159,7 @@ class Main extends CI_Controller {
             $expenseOb->expenseName = '';
             $expenseOb->expenseOption = 1;
             $expenseOb->obType = 1;
+            $expenseOb->expenseDate = date("Y-m-d");
             echo $this->helper->showSuccess($this->lang->line('SuccessFormExpenseObject'),$expenseOb);
         }
         elseif($obType==2){
@@ -155,6 +187,7 @@ class Main extends CI_Controller {
             $expenseOb->expenseName = $expense['expenseName'];
             $expenseOb->expenseOption = $expense['expenseOption'];
             $expenseOb->obType = 2;
+            $expenseOb->expenseDate = $expense['expenseDate'];
             echo $this->helper->showSuccess($this->lang->line('SuccessFormExpenseObject'),$expenseOb);
         }
         else{
@@ -234,7 +267,7 @@ class Main extends CI_Controller {
 		$row=array();
 		foreach($trips as $trip){
 			$row['tripId'] = $trip['tripId'];
-			$row['tripName'] = $trip['tripName'].' | '.$trip['date'];
+			$row['tripName'] = $trip['tripName'].' | '.$trip['tripDate'];
 			array_push($data,$row);
 		}
 		return $data;

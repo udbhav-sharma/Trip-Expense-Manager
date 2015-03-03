@@ -101,7 +101,7 @@
                     <tr ng-repeat="expense in expenses">
                         <td>{{$index+1}}</td>
                         <td>{{expense.expenseName}}</td>
-                        <td>{{expense.date}}</td>
+                        <td>{{expense.expenseDate}}</td>
                         <td>{{expense.amount}}</td>
                         <td class="text-center" >
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#expenseModal" ng-click="getExpenseOb(2, expense.expenseId)">

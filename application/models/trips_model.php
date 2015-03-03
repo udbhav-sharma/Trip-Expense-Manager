@@ -17,7 +17,7 @@ class Trips_model extends CI_Model{
     public function getTrips( $userId, $isJson=false, $isObject = false ){
         $query = $this->db_trips->select('
                                             id as tripId,
-                                            DATE(date) as date,
+                                            date as tripDate,
                                             name as tripName
                                         ')
                                 ->where(array('userId'=>$userId))
@@ -32,7 +32,7 @@ class Trips_model extends CI_Model{
     public function getTripDetails( $userId, $tripId, $isJson=false, $isObject = false ){
         $query = $this->db_trips->select('
                                             id as tripId,
-                                            date,
+                                            date as tripDate,
                                             name as tripName
                                         ')
                                 ->where(array('id' => $tripId, 'userId' => $userId))

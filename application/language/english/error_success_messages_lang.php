@@ -12,6 +12,7 @@ $lang['SuccessDataRetrieval']='Data fetched and updated successfully';
 //Trip
 $lang['ErrorTripCreation']='Error in creating trip. Please reload/refresh the page and try again.';
 $lang['SuccessTripCreation']='Trip created successfully';
+$lang['SuccessFormTripObject']='Trip object formed successfully';
 $lang['ErrorTripDeletion']='Error in deleting trip. Please reload/refresh the page and try again.';
 $lang['SuccessTripDeletion']='Trip deleted successfully';
 

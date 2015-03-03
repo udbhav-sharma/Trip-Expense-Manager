@@ -20,7 +20,7 @@ class Expenses_model extends CI_Model{
                                             name as expenseName,
                                             amount,
                                             option as expenseOption,
-                                            date
+                                            date as expenseDate
                                         ')
                                 ->where(array( 'tripId' => $tripId ))
                                 ->order_by('date desc')
@@ -39,7 +39,7 @@ class Expenses_model extends CI_Model{
                                             name as expenseName,
                                             amount,
                                             option as expenseOption,
-                                            date
+                                            date as expenseDate
                                         ')
                                 ->where(array( 'id' => $expenseId ))
                                 ->get($this->tables['expenses']);
