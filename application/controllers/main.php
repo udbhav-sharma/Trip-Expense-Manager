@@ -74,22 +74,39 @@ class Main extends CI_Controller {
 
         $userId = $this->session->userdata('user_id');
 
-        $tripName = $this->input->post('tripName');
-        $tripDate = $this->input->post('tripDate');
+        $trip = json_decode($this->input->post('trip'));
+
+        $tripName = $trip->tripName;
+        $tripDate = $trip->tripDate;
+        $obType = $trip->obType;
 
         if(empty($tripName) || empty($tripDate)){
             echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
             return;
         }
 
-        $tripId = $this->trips_model->addTrip( $userId, $tripName, $tripDate );
-        if($tripId) {
-            echo $this->helper->showSuccess($this->lang->line('SuccessTripCreation'),array('tripId'=>$tripId,'date'=>$tripDate));
+        if($obType==1) {
+            $tripId = $this->trips_model->addTrip( $userId, $tripName, $tripDate );
+            if ($tripId) {
+                $newTrip = $this->trips_model->getTripDetails( $userId, $tripId );
+                echo $this->helper->showSuccess($this->lang->line('SuccessTripCreation'),$newTrip);
+                return;
+            }
+            echo $this->helper->showError($this->lang->line('ErrorTripCreation'));
             return;
         }
-
-        echo $this->helper->showError($this->lang->line('ErrorTripCreation'));
-        return;
+        elseif($obType==2){
+            $tripId = $trip->tripId;
+            if ($tripId) {
+                if($this->trips_model->updateTrip( $userId, $tripId, $tripName, $tripDate )) {
+                    $updatedTrip = $this->trips_model->getTripDetails( $userId, $tripId );
+                    echo $this->helper->showSuccess($this->lang->line('SuccessTripUpdate'),$updatedTrip);
+                    return;
+                }
+            }
+            echo $this->helper->showError($this->lang->line('ErrorTripUpdate'));
+            return;
+        }
     }
 
 	public function deleteTrip(){
@@ -208,6 +225,11 @@ class Main extends CI_Controller {
         $expenseDate = $expense->expenseDate;
         $obType = $expense->obType;
 
+        if (empty($expenseName) || empty($amount) || empty($expenseOption) || empty($expenseDate)) {
+            echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+            return;
+        }
+
         $memberIds = array();
         foreach($members as $member){
             if($member->flag)
@@ -215,10 +237,6 @@ class Main extends CI_Controller {
         }
 
         if($obType==1) {
-            if (empty($expenseName) || empty($amount) || empty($expenseOption) || empty($expenseDate)) {
-                echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
-                return;
-            }
             $expenseId = $this->expenses_model->addExpense($tripId, $expenseName, $amount, $expenseOption, $expenseDate);
             if ($expenseId) {
                 if ($this->member_expense_model->addMemberToExpense($expenseId, $memberIds)) {

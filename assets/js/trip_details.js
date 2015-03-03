@@ -92,14 +92,6 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
             });
     }
 
-    $scope.expenseOb = {
-        members:[],
-        amount:'',
-        expenseName:'',
-        expenseOption:1,
-        expenseDate:''
-    };
-
     $scope.getExpenseOb = function getExpenseOb(obType,expenseId){
         $scope.alert = alert.successAlert( $scope.CONSTANTS.LOADING );
         $http({

@@ -20,7 +20,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <button class="btn btn-default"  data-toggle="modal" data-target="#genericModal" ng-click="getTripOb(2,1)"><i class="fa fa-cab"></i> New Trip</button>
+            <button class="btn btn-default"  data-toggle="modal" data-target="#tripModal" ng-click="getTripOb(1,-1)"><i class="fa fa-cab"></i> New Trip</button>
         </div>
     </div>
     <div class="table-responsive">
@@ -43,7 +43,10 @@
                     <td><?php echo $trip['tripDate']; ?></td>
                     <td><?php echo $trip['tripName']; ?></td>
                     <td class="text-center">
-                        <button class="btn btn-danger btn-sm remove" data-tripid=<?php echo $trip['tripId']; ?> >
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#tripModal" ng-click="getTripOb(2, <?php echo $trip['tripId']; ?>)">
+                            <span class="glyphicon glyphicon-list-alt"></span>
+                        </button>
+                        <button class="btn btn-danger btn-sm remove" ng-click="deleteTrip( <?php echo $trip['tripId']; ?> )" data-tripid=<?php echo $trip['tripId']; ?> >
                             <i class="fa fa-remove"></i>
                         </button>
                     </td>
@@ -54,22 +57,22 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="genericModal" tabindex="-1" role="dialog" aria-labelledby="genericModalLabel" aria-hidden="true">
+    <div class="modal fade" id="tripModal" tabindex="-1" role="dialog" aria-labelledby="tripModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
 
                 <div class="row hidden-print">
-                    <div class="notification-container new-trip-alert" style="display: none">
+                    <div class="notification-container" ng-show="tripModalAlert.show">
                         <div class="notification-message">
-                            <button type="button" class="close btn-close-alert hidden-print" ><span aria-hidden="true">&times;</span></button>
-                            <span class='message'></span>
+                            <button type="button" class="close" ng-click="hideTripModalAlert()" ><span aria-hidden="true">&times;</span></button>
+                            <span class='message'>{{tripModalAlert.message}}</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="genericModalLabel"> Trip </h4>
+                    <h4 class="modal-title" id="tripModalLabel"> Trip </h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -86,7 +89,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" ng-click="saveTrip()">Save changes</button>
                 </div>
             </div>
         </div>

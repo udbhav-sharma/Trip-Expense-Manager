@@ -20,7 +20,7 @@ class Trips_model extends CI_Model{
                                             date as tripDate,
                                             name as tripName
                                         ')
-                                ->where(array('userId'=>$userId))
+                                ->where(array('user_id'=>$userId))
                                 ->get($this->tables['trips']);
         if($isObject)
             return $query->result();
@@ -35,7 +35,7 @@ class Trips_model extends CI_Model{
                                             date as tripDate,
                                             name as tripName
                                         ')
-                                ->where(array('id' => $tripId, 'userId' => $userId))
+                                ->where(array('id' => $tripId, 'user_id' => $userId))
                                 ->get($this->tables['trips']);
         if($query->num_rows==1) {
             if ($isObject)
@@ -52,7 +52,7 @@ class Trips_model extends CI_Model{
         $tripDate = date('Y-m-d',$tripDate);
 
         $data = array(
-            'userId' => $userId,
+            'user_id' => $userId,
             'name' => $tripName,
             'date' => $tripDate
         );
@@ -64,10 +64,27 @@ class Trips_model extends CI_Model{
     }
 
     public function deleteTrip( $userId, $tripId ){
-        $this->db_trips->delete($this->tables['trips'],array('id' => $tripId, 'userId' => $userId));
+        $this->db_trips->delete($this->tables['trips'],array('id' => $tripId, 'user_id' => $userId));
         if($this->db_trips->affected_rows()>0)
             return true;
         return false;
+    }
+
+    public function updateTrip( $userId, $tripId, $tripName, $tripDate ){
+        $tripDate = strtotime($tripDate);
+        $tripDate = date('Y-m-d',$tripDate);
+
+        $data = array(
+            'name' => $tripName,
+            'date' => $tripDate
+        );
+
+        $this->db_trips->where(array('id'=>$tripId,'user_id'=>$userId))
+            ->update($this->tables['trips'],$data);
+
+        if($this->db_trips->affected_rows() > 0 )
+            return true;
+        return FALSE;
     }
 }
 
