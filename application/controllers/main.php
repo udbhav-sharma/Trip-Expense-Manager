@@ -38,6 +38,7 @@ class Main extends CI_Controller {
 	}
 
     public function getTripOb(){
+        $userId = $this->session->userdata('user_id');
         $obType = $this->input->post('obType');
 
         $tripOb = new stdClass();
@@ -56,7 +57,7 @@ class Main extends CI_Controller {
                 return;
             }
 
-            $trip = $this->trips_model->getTripDetails($tripId);
+            $trip = $this->trips_model->getTripDetails($userId,$tripId);
 
             $tripOb->tripId = $trip['tripId'];
             $tripOb->tripName = $trip['tripName'];
