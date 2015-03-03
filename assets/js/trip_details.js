@@ -130,8 +130,6 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
     }
 
     $scope.saveExpense = function saveExpense(){
-        console.log($scope.expenseOb);
-
         $scope.expenseModalAlert = alert.successAlert( $scope.CONSTANTS.LOADING );
         $http({
             method:'POST',
@@ -164,6 +162,34 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
             });
     }
 
+    $scope.deleteExpense = function deleteExpense(expenseId){
+        $scope.alert = alert.successAlert( $scope.CONSTANTS.LOADING );
+        $http({
+            method:'POST',
+            url:'deleteExpense',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            },
+            data:{expenseId:expenseId}
+        })
+            .success(function(data, status) {
+                if(data.code ==  $scope.CONSTANTS.SUCCESS_CODE ){
+                    deleteExistingExpense(expenseId);
+                    $scope.alert=alert.successAlert( data.message );
+                }
+                else{
+                    $scope.alert=alert.errorAlert( data.message );
+                }
+            })
+            .error(function(data, status) {
+                $scope.alert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
+            });
+    }
+
     $scope.hideExpenseModalAlert=function hideExpenseModalAlert(){
         $scope.expenseModalAlert.show=false;
     }
@@ -179,4 +205,16 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
             }
         }
     }
+
+    function deleteExistingExpense(expenseId){
+        var index = -1;
+        for(var i=0;i<$scope.expenses.length;i++){
+            if($scope.expenses[i].expenseId == expenseId){
+                index = i;
+                break;
+            }
+        }
+        $scope.expenses.splice(index,1);
+    }
+
 });

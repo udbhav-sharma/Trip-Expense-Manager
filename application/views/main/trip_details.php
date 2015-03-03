@@ -107,7 +107,7 @@
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#expenseModal" ng-click="getExpenseOb(2, expense.expenseId)">
                                 <span class="glyphicon glyphicon-list-alt"></span>
                             </button>
-                            <button type="button" class="btn btn-danger btn-sm" disabled>
+                            <button type="button" class="btn btn-danger btn-sm" ng-click="deleteExpense(expense.expenseId)">
                                 <i class="fa fa-remove"></i>
                             </button>
                         </td>
@@ -140,7 +140,7 @@
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="expenseModalLabel"> New Expense </h4>
+                    <h4 class="modal-title" id="expenseModalLabel"> Expense </h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">

@@ -213,7 +213,20 @@ class Main extends CI_Controller {
     }
 
     public function deleteExpense(){
+        $expenseId = $this->input->post('expenseId');
 
+        if(empty($expenseId)){
+            echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+            return;
+        }
+
+        if($this->expenses_model->deleteExpense( $expenseId )){
+            echo $this->helper->showSuccess($this->lang->line('SuccessExpenseDeletion'));
+            return;
+        }
+
+        echo $this->helper->showError($this->lang->line('ErrorExpenseDeletion'));
+        return;
     }
 
 	private function parseTrips( $trips ){
