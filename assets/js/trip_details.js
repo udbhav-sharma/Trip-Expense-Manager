@@ -147,6 +147,12 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
         })
             .success(function(data, status) {
                 if(data.code ==  $scope.CONSTANTS.SUCCESS_CODE ){
+                    if($scope.expenseOb.obType==1){
+                        addNewExpense(data.data);
+                    }
+                    else if($scope.expenseOb.obType==2){
+                        updateExpense(data.data);
+                    }
                     $scope.expenseModalAlert=alert.successAlert( data.message );
                 }
                 else{
@@ -162,4 +168,15 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
         $scope.expenseModalAlert.show=false;
     }
 
+    function addNewExpense(expense){
+       $scope.expenses.push(expense);
+    }
+
+    function updateExpense(expense){
+        for(i=0;i<$scope.expenses.length;i++){
+            if($scope.expenses[i].expenseId == expense.expenseId){
+                $scope.expenses[i]=JSON.parse(JSON.stringify(expense));
+            }
+        }
+    }
 });

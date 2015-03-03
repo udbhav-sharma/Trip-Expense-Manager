@@ -188,7 +188,8 @@ class Main extends CI_Controller {
             $expenseId = $this->expenses_model->addExpense($tripId, $expenseName, $amount, $expenseOption, $expenseDate);
             if ($expenseId) {
                 if ($this->member_expense_model->addMemberToExpense($expenseId, $memberIds)) {
-                    echo $this->helper->showSuccess($this->lang->line('SuccessExpenseCreation'));
+                    $newExpense = $this->expenses_model->getExpenseDetails($expenseId);
+                    echo $this->helper->showSuccess($this->lang->line('SuccessExpenseCreation'),$newExpense);
                     return;
                 }
             }
@@ -200,7 +201,8 @@ class Main extends CI_Controller {
             if ($expenseId) {
                 if($this->expenses_model->updateExpense( $expenseId, $expenseName, $amount, $expenseOption, $expenseDate )) {
                     if ($this->member_expense_model->updateMapping($expenseId, $memberIds)) {
-                        echo $this->helper->showSuccess($this->lang->line('SuccessExpenseUpdate'));
+                        $updatedExpense = $this->expenses_model->getExpenseDetails($expenseId);
+                        echo $this->helper->showSuccess($this->lang->line('SuccessExpenseUpdate'),$updatedExpense);
                         return;
                     }
                 }
