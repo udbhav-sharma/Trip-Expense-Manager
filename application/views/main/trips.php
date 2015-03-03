@@ -34,24 +34,19 @@
             </tr>
             </thead>
             <tbody>
-            <?php
-            $i=0;
-            foreach($trips as $trip ){
-                ?>
-                <tr>
-                    <td scope="row"><?php echo ++$i; ?></td>
-                    <td><?php echo $trip['tripDate']; ?></td>
-                    <td><?php echo $trip['tripName']; ?></td>
+                <tr ng-repeat="trip in trips">
+                    <td>{{$index+1}}</td>
+                    <td>{{trip.tripDate}}</td>
+                    <td>{{trip.tripName}}</td>
                     <td class="text-center">
-                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#tripModal" ng-click="getTripOb(2, <?php echo $trip['tripId']; ?>)">
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#tripModal" ng-click="getTripOb(2,trip.tripId)">
                             <span class="glyphicon glyphicon-list-alt"></span>
                         </button>
-                        <button class="btn btn-danger btn-sm remove" ng-click="deleteTrip( <?php echo $trip['tripId']; ?> )" data-tripid=<?php echo $trip['tripId']; ?> >
+                        <button class="btn btn-danger btn-sm remove" ng-click="deleteTrip( trip.tripId )">
                             <i class="fa fa-remove"></i>
                         </button>
                     </td>
                 </tr>
-            <?php } ?>
             </tbody>
         </table>
     </div>
@@ -83,7 +78,7 @@
                     <br>
                     <div class="row">
                         <div class="col-md-offset-2 col-md-8">
-                            <input type="text" class="form-control" ng-model="tripOb.tripDate" placeholder="Trip Date">
+                            <input type="text" class="form-control" id="tripDate" ng-model="tripOb.tripDate" placeholder="Trip Date">
                         </div>
                     </div>
                 </div>

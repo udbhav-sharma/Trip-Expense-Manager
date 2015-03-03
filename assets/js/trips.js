@@ -21,6 +21,36 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
     $scope.CONSTANTS=CONSTANTS;
     $scope.alert=alert.initializeAlert();
     $scope.tripModalAlert=alert.initializeAlert();
+    $scope.trips=[];
+
+    function fetchTrips(){
+        $scope.alert = alert.successAlert( $scope.CONSTANTS.LOADING );
+        $http({
+            method:'POST',
+            url:'main/getTrips',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            },
+            data:{tripId:$scope.tripId}
+        })
+            .success(function(data, status) {
+                if(data.code ==  $scope.CONSTANTS.SUCCESS_CODE ){
+                    //$scope.alert=alert.successAlert( data.message );
+                    $scope.hideAlert();
+                    $scope.trips = data.data;
+                }
+                else{
+                    $scope.alert=alert.errorAlert( data.message );
+                }
+            })
+            .error(function(data, status) {
+                $scope.alert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
+            });
+    }
 
     $scope.getTripOb = function getTripOb(obType,tripId){
         $scope.alert = alert.successAlert( $scope.CONSTANTS.LOADING );
@@ -122,12 +152,27 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
     }
 
     function addNewTrip(trip){
+        $scope.trips.push(trip);
     }
 
     function updateTrip(trip){
+        for(i=0;i<$scope.trips.length;i++){
+            if($scope.trips[i].tripId == trip.tripId){
+                $scope.trips[i]=JSON.parse(JSON.stringify(trip));
+            }
+        }
     }
 
     function deleteExistingTrip(tripId){
+        var index = -1;
+        for(var i=0;i<$scope.trips.length;i++){
+            if($scope.trips[i].tripId == tripId){
+                index = i;
+                break;
+            }
+        }
+        $scope.trips.splice(index,1);
     }
 
+    fetchTrips();
 });

@@ -20,11 +20,7 @@ class Main extends CI_Controller {
 	}
 
 	public function index(){
-        $userId = $this->session->userdata('user_id');
-		$trips = $this->trips_model->getTrips($userId);
-		$data = array();
 		$data['tab'] = 'my trips';
-		$data['trips'] = $trips;
 		$this->helper->_render_page('main/trips',$data);
 	}
 
@@ -36,6 +32,14 @@ class Main extends CI_Controller {
 		$data['tab']='trip details';
 		$this->helper->_render_page('main/trip_details',$data);
 	}
+
+    public function getTrips(){
+        $userId = $this->session->userdata('user_id');
+        $trips = $this->trips_model->getTrips($userId);
+
+        echo $this->helper->showSuccess($this->lang->line('SuccessDataRetrieval'),$trips);
+        return;
+    }
 
     public function getTripOb(){
         $userId = $this->session->userdata('user_id');
