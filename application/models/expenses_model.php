@@ -22,8 +22,9 @@ class Expenses_model extends CI_Model{
                                             option as expenseOption,
                                             date
                                         ')
-            ->where(array( 'tripId' => $tripId ))
-            ->get($this->tables['expenses']);
+                                ->where(array( 'tripId' => $tripId ))
+                                ->order_by('date desc')
+                                ->get($this->tables['expenses']);
         if($isObject)
             return $query->result();
         elseif($isJson)
@@ -95,5 +96,26 @@ class Expenses_model extends CI_Model{
             return true;
         return FALSE;
     }
+
+    public function getTripExpensesStats($tripId, $isJson=false, $isObject = false ){
+        $query = $this->db_trips->select('
+                                            sum(amount) as amount,
+                                            date
+                                        ')
+            ->where(array( 'tripId' => $tripId ))
+            ->group_by('date')
+            ->order_by('date asc')
+            ->get($this->tables['expenses']);
+
+        if($query->num_rows()>0) {
+            if ($isObject)
+                return $query->result();
+            elseif ($isJson)
+                return json_encode($query->result('array'));
+            return $query->result('array');
+        }
+        return false;
+    }
+
 }
 ?>

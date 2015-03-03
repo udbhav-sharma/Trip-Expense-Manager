@@ -227,6 +227,36 @@ class Main extends CI_Controller {
 		return $data;
 	}
 
+    public function tripStats(){
+        $userId = $this->session->userdata('user_id');
+        $trips = $this->trips_model->getTrips($userId);
+        $data = array();
+        $data['trips'] = $this->parseTrips($trips);
+        $data['tab']='trip stats';
+        $this->helper->_render_page('main/trip_stats',$data);
+    }
+
+    public function getTripExpensesStats(){
+        $userId = $this->session->userdata('user_id');
+        $tripId = $this->input->post('tripId');
+
+        if(empty($tripId)){
+            echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+            return;
+        }
+
+        $data=array();
+        $data['trip'] = $this->trips_model->getTripDetails( $userId, $tripId );
+        $data['graphData'] = $this->expenses_model->getTripExpensesStats( $tripId );
+
+        if(!$data){
+            echo $this->helper->showError($this->lang->line('ErrorTripStats'));
+            return;
+        }
+        echo $this->helper->showSuccess($this->lang->line('SuccessTripStats'),$data);
+        return;
+    }
+
 }
 
 /* End of file main.php */
