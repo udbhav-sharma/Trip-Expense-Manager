@@ -23,6 +23,7 @@
             <button class="btn btn-default"  data-toggle="modal" data-target="#tripModal" ng-click="getTripOb(1,-1)"><i class="fa fa-cab"></i> New Trip</button>
         </div>
     </div>
+    <br>
     <div class="table-responsive">
         <table class="table" id="trips-table">
             <thead>

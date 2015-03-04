@@ -20,7 +20,6 @@ app.controller('tripStats',function($scope, CONSTANTS, $http, alert){
     $scope.fetchTripStats = function fetchTripStats(){
 
         $scope.alert = alert.successAlert( $scope.CONSTANTS.LOADING );
-        $scope.showGraph = false;
         $scope.trip = {tripId:'',tripName:'',tripDate:''};
 
         $http({
