@@ -41,7 +41,7 @@
         <div class="col-md-5">
             <div class="row">
                 <div class="col-md-12">
-                    <button type="button" class="btn btn-default" disabled><i class="fa fa-user-plus"></i> New Member</button>
+                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#memberModal" ng-click="getMemberOb(1,-1)" ><i class="fa fa-user-plus"></i> New Member</button>
                 </div>
             </div>
             <br>
@@ -59,10 +59,10 @@
                         <td>{{$index+1}}</td>
                         <td>{{member.memberName}}</td>
                         <td class="text-center" >
-                            <button type="button" class="btn btn-primary btn-sm" disabled>
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#memberModal" ng-click="getMemberOb(2, member.memberId)" >
                                 <span class="glyphicon glyphicon-list-alt"></span>
                             </button>
-                            <button type="button" class="btn btn-danger btn-sm" disabled>
+                            <button type="button" class="btn btn-danger btn-sm" ng-click="deleteMember(member.memberId)" >
                                 <i class="fa fa-remove"></i>
                             </button>
                         </td>
@@ -202,9 +202,34 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="genericModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="memberModal" tabindex="-1" role="dialog" aria-labelledby="memberLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+
+                <div class="row hidden-print">
+                    <div class="notification-container" ng-show="memberModalAlert.show">
+                        <div class="notification-message">
+                            <button type="button" class="close" ng-click="hideMemberModalAlert()" ><span aria-hidden="true">&times;</span></button>
+                            <span class='message'>{{memberModalAlert.message}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="memberModalLabel"> Member </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-offset-2 col-md-7">
+                            <input type="text" class="form-control" ng-model="memberOb.memberName" placeholder="Member Name">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="saveMember()">Save changes</button>
+                </div>
             </div>
         </div>
     </div>

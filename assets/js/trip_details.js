@@ -17,6 +17,7 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
     $scope.CONSTANTS=CONSTANTS;
     $scope.alert=alert.initializeAlert();
     $scope.expenseModalAlert=alert.initializeAlert();
+    $scope.memberModalAlert=alert.initializeAlert();
 
     $scope.trip = {tripId:'', tripName:'', date:''};
     $scope.members = [];
@@ -64,32 +65,6 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
         for(i=0;i<$scope.expenses.length;i++)
             sum+=parseFloat($scope.expenses[i].amount);
         return "Rs "+sum;
-    }
-
-    $scope.loadModal = function loadModal(url,data){
-
-        $scope.alert = alert.successAlert( $scope.CONSTANTS.LOADING );
-
-        $http({
-            method:'POST',
-            url:url,
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            transformRequest: function(obj) {
-                var str = [];
-                for(var p in obj)
-                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-                return str.join("&");
-            },
-            data:data
-        })
-            .success(function(data, status) {
-                //$scope.alert=alert.successAlert( data.message );
-                $scope.hideAlert();
-                $('#genericModal').find('.modal-content').html(data);
-            })
-            .error(function(data, status) {
-                $scope.alert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
-            });
     }
 
     $scope.getExpenseOb = function getExpenseOb(obType,expenseId){
@@ -207,6 +182,123 @@ app.controller('trip',function($scope, CONSTANTS, $http, alert){
             }
         }
         $scope.expenses.splice(index,1);
+    }
+
+    $scope.getMemberOb = function getMemberOb(obType,memberId){
+        $scope.alert = alert.successAlert( $scope.CONSTANTS.LOADING );
+        $http({
+            method:'POST',
+            url:'getMemberOb',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            },
+            data:{obType:obType,memberId:memberId}
+        })
+            .success(function(data, status) {
+                console.log(data);
+                if(data.code ==  $scope.CONSTANTS.SUCCESS_CODE ){
+                    $scope.memberOb = data.data;
+                    $scope.hideAlert();
+                }
+                else{
+                    $scope.alert=alert.errorAlert( data.message );
+                }
+            })
+            .error(function(data, status) {
+                $scope.alert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
+            });
+    }
+
+    $scope.saveMember = function saveMember(){
+        $scope.memberModalAlert = alert.successAlert( $scope.CONSTANTS.LOADING );
+        $http({
+            method:'POST',
+            url:'addMember',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            },
+            data:{member:JSON.stringify($scope.memberOb)}
+        })
+            .success(function(data, status) {
+                if(data.code ==  $scope.CONSTANTS.SUCCESS_CODE ){
+                    if($scope.memberOb.obType==1){
+                        addNewMember(data.data);
+                    }
+                    else if($scope.memberOb.obType==2){
+                        updateMember(data.data);
+                    }
+                    $scope.memberModalAlert=alert.successAlert( data.message );
+                }
+                else{
+                    $scope.memberModalAlert=alert.errorAlert( data.message );
+                }
+            })
+            .error(function(data, status) {
+                $scope.memberModalAlert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
+            });
+    }
+
+    $scope.deleteMember = function deleteMember(memberId){
+        $scope.alert = alert.successAlert( $scope.CONSTANTS.LOADING );
+        $http({
+            method:'POST',
+            url:'deleteMember',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            },
+            data:{memberId:memberId}
+        })
+            .success(function(data, status) {
+                if(data.code ==  $scope.CONSTANTS.SUCCESS_CODE ){
+                    deleteExistingMember(memberId);
+                    $scope.alert=alert.successAlert( data.message );
+                }
+                else{
+                    $scope.alert=alert.errorAlert( data.message );
+                }
+            })
+            .error(function(data, status) {
+                $scope.alert=alert.errorAlert( $scope.CONSTANTS.NETWORK_ERROR );
+            });
+    }
+
+    $scope.hideMemberModalAlert=function hideMemberModalAlert(){
+        $scope.memberModalAlert.show=false;
+    }
+
+    function addNewMember(member){
+        $scope.members.push(member);
+    }
+
+    function updateMember(member){
+        for(i=0;i<$scope.members.length;i++){
+            if($scope.members[i].memberId == member.memberId){
+                $scope.members[i]=JSON.parse(JSON.stringify(member));
+            }
+        }
+    }
+
+    function deleteExistingMember(memberId){
+        var index = -1;
+        for(var i=0;i<$scope.members.length;i++){
+            if($scope.members[i].memberId == memberId){
+                index = i;
+                break;
+            }
+        }
+        $scope.members.splice(index,1);
     }
 
 });
