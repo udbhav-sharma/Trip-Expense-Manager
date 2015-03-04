@@ -16,13 +16,13 @@ class Expenses_model extends CI_Model{
     public function getTripExpenses( $tripId, $isJson=false, $isObject = false ){
         $query = $this->db_trips->select('
                                             id as expenseId,
-                                            tripId,
+                                            trip_id as tripId,
                                             name as expenseName,
                                             amount,
                                             option as expenseOption,
                                             date as expenseDate
                                         ')
-                                ->where(array( 'tripId' => $tripId ))
+                                ->where(array( 'trip_id' => $tripId ))
                                 ->order_by('date desc')
                                 ->get($this->tables['expenses']);
         if($isObject)
@@ -35,7 +35,7 @@ class Expenses_model extends CI_Model{
     public function getExpenseDetails( $expenseId, $isJson=false, $isObject = false ){
         $query = $this->db_trips->select('
                                             id as expenseId,
-                                            tripId,
+                                            trip_id as tripId,
                                             name as expenseName,
                                             amount,
                                             option as expenseOption,
@@ -58,7 +58,7 @@ class Expenses_model extends CI_Model{
         $expenseDate = date('Y-m-d',$expenseDate);
 
         $data = array(
-            'tripId' => $tripId,
+            'trip_id' => $tripId,
             'name' => $expenseName,
             'amount' => $amount,
             'option' => $expenseOption,
@@ -102,7 +102,7 @@ class Expenses_model extends CI_Model{
                                             sum(amount) as amount,
                                             date
                                         ')
-            ->where(array( 'tripId' => $tripId ))
+            ->where(array( 'trip_id' => $tripId ))
             ->group_by('date')
             ->order_by('date asc')
             ->get($this->tables['expenses']);

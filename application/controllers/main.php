@@ -155,12 +155,90 @@ class Main extends CI_Controller {
 		return;
 	}
 
-    public function addMember(){
+    public function getMemberOb(){
+        $obType = $this->input->post('obType');
+        $tripId = $this->session->userdata('tripId');
 
+        $memberOb = new stdClass();
+        if($obType==1){
+            $memberOb->memberId = '';
+            $memberOb->memberName = '';
+            $memberOb->obType = 1;
+            $memberOb->tripId = $tripId;
+            echo $this->helper->showSuccess($this->lang->line('SuccessFormMemberObject'),$memberOb);
+        }
+        elseif($obType==2){
+            $memberId = $this->input->post('memberId');
+
+            if(empty($memberId)){
+                echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+                return;
+            }
+
+            $member = $this->members_model->getMemberDetails($memberId);
+
+            $memberOb->memberId = $member['memberId'];
+            $memberOb->memberName = $member['memberName'];
+            $memberOb->obType = 2;
+            $memberOb->tripId = $member['tripId'];
+            echo $this->helper->showSuccess($this->lang->line('SuccessFormMemberObject'),$memberOb);
+        }
+        else{
+            echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+        }
+    }
+
+    public function addMember(){
+        $member = json_decode($this->input->post('member'));
+        $tripId = $this->session->userdata('tripId');
+
+        $memberName = $member->memberName;
+        $obType = $member->obType;
+
+        if(empty($memberName)){
+            echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+            return;
+        }
+
+        if($obType==1) {
+            $memberId = $this->members_model->addMember( $tripId, $memberName );
+            if ($memberId) {
+                $newMember = $this->members_model->getMemberDetails( $memberId );
+                echo $this->helper->showSuccess($this->lang->line('SuccessMemberCreation'),$newMember);
+                return;
+            }
+            echo $this->helper->showError($this->lang->line('ErrorMemberCreation'));
+            return;
+        }
+        elseif($obType==2){
+            $memberId = $member->memberId;
+            if ($memberId) {
+                if($this->members_model->updateMember( $memberId, $memberName )) {
+                    $updatedMember = $this->members_model->getMemberDetails( $memberId );
+                    echo $this->helper->showSuccess($this->lang->line('SuccessMemberUpdate'),$updatedMember);
+                    return;
+                }
+            }
+            echo $this->helper->showError($this->lang->line('ErrorMemberUpdate'));
+            return;
+        }
     }
 
     public function deleteMember(){
+        $memberId = $this->input->post('memberId');
 
+        if(empty($memberId)){
+            echo $this->helper->showError($this->lang->line('ErrorInvalidParameter'));
+            return;
+        }
+
+        if($this->members_model->deleteMember( $memberId )){
+            echo $this->helper->showSuccess($this->lang->line('SuccessMemberDeletion'));
+            return;
+        }
+
+        echo $this->helper->showError($this->lang->line('ErrorMemberDeletion'));
+        return;
     }
 
     public function getExpenseOb(){
