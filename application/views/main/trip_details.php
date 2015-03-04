@@ -144,7 +144,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-5" style="overflow-y: scroll; height:400px">
+                        <div class="col-md-5" style="overflow-y: scroll; max-height:400px">
                             <table class="table">
                                 <thead>
                                 <tr>
@@ -221,9 +221,30 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-offset-2 col-md-7">
+                        <div class="col-md-7">
                             <input type="text" class="form-control" ng-model="memberOb.memberName" placeholder="Member Name">
                         </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                       <div class="col-md-10 table-responsive" style="overflow-y: scroll; max-height:400px">
+                           <table class="table table-striped">
+                               <thead>
+                               <tr>
+                                   <th>#</th>
+                                   <th>Expense</th>
+                                   <th>Date</th>
+                                   <th>Amount</th>
+                               </tr>
+                               <tr ng-repeat="expense in memberOb.expenses">
+                                   <td>{{$index+1}}</td>
+                                   <td>{{expense.expenseName}}</td>
+                                   <td>{{expense.expenseDate}}</td>
+                                   <td>{{expense.expenseAmount}}</td>
+                               </tr>
+                               </thead>
+                           </table>
+                       </div>
                     </div>
                 </div>
                 <div class="modal-footer">

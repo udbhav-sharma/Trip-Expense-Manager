@@ -164,6 +164,7 @@ class Main extends CI_Controller {
             $memberOb->memberId = '';
             $memberOb->memberName = '';
             $memberOb->obType = 1;
+            $memberOb->expenses = array();
             $memberOb->tripId = $tripId;
             echo $this->helper->showSuccess($this->lang->line('SuccessFormMemberObject'),$memberOb);
         }
@@ -180,6 +181,7 @@ class Main extends CI_Controller {
             $memberOb->memberId = $member['memberId'];
             $memberOb->memberName = $member['memberName'];
             $memberOb->obType = 2;
+            $memberOb->expenses = array();
             $memberOb->tripId = $member['tripId'];
             echo $this->helper->showSuccess($this->lang->line('SuccessFormMemberObject'),$memberOb);
         }
